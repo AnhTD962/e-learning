@@ -126,6 +126,22 @@ public class LessonService {
     }
 
     /**
+     * Lấy tất cả các bài học.
+     * Chỉ ADMIN hoặc TEACHER mới có thể truy cập (hoặc bất kỳ ai nếu không có dữ liệu nhạy cảm).
+     *
+     * @return Danh sách các đối tượng LessonResponse.
+     */
+    public List<LessonResponse> getAllLessons() {
+        // Có thể thêm kiểm tra quyền ở đây nếu chỉ ADMIN/TEACHER được xem tất cả
+        // if (!SecurityUtils.isAdmin() && !SecurityUtils.isTeacher()) {
+        //     throw new UnauthorizedException("Bạn không được phép xem tất cả bài học.");
+        // }
+        return lessonRepository.findAll().stream()
+                .map(this::convertToLessonResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Cập nhật một bài học hiện có.
      *
      * @param lessonId      ID của bài học cần cập nhật.

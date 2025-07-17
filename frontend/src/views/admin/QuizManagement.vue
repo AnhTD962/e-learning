@@ -93,18 +93,32 @@
                 class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               ></textarea>
             </div>
+
+            <!-- Lesson Selection -->
             <div class="mb-4">
-              <label for="lessonId" class="block text-gray-700 text-sm font-semibold mb-2">Associated Lesson ID:</label>
-              <input
-                type="text"
-                id="lessonId"
-                v-model="currentQuiz.lessonId"
+              <label for="selectLesson" class="block text-gray-700 text-sm font-semibold mb-2">Select Associated Lesson:</label>
+              <select
+                id="selectLesson"
+                v-model="selectedLessonId"
+                @change="onLessonSelect"
                 class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
+              >
+                <option value="">-- Select a Lesson --</option>
+                <option v-for="lesson in lessonStore.lessons" :key="lesson.id" :value="lesson.id">
+                  {{ lesson.title }} (ID: {{ lesson.id }})
+                </option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="lessonIdDisplay" class="block text-gray-700 text-sm font-semibold mb-2">Lesson ID (Auto-populated):</label>
+              <input
+                type="text"
+                id="lessonIdDisplay"
+                v-model="currentQuiz.lessonId"
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+                readonly
               />
-              <p class="text-xs text-gray-500 mt-1">
-                The ID of the lesson this quiz belongs to.
-              </p>
             </div>
           </div>
 
@@ -221,11 +235,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useQuizStore } from '../../stores/quizzes';
+import { useLessonStore } from '../../stores/lessons'; // Import lesson store
 import { useAuthStore } from '../../stores/auth';
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
 import MessageBox from '../../components/common/MessageBox.vue';
 
 const quizStore = useQuizStore();
+const lessonStore = useLessonStore(); // Initialize lesson store
 const authStore = useAuthStore();
 
 const showQuizModal = ref(false);
@@ -234,10 +250,13 @@ const currentQuiz = ref({
   id: null,
   title: '',
   description: '',
-  lessonId: '',
+  lessonId: '', // Will be auto-populated
   questions: [],
 });
 const quizIdToDelete = ref(null);
+
+// For dropdown selection
+const selectedLessonId = ref('');
 
 const showMessageBox = ref(false);
 const messageBoxType = ref('info');
@@ -245,12 +264,19 @@ const messageBoxTitle = ref('');
 const messageBoxMessage = ref('');
 const messageBoxAction = ref(null); // 'deleteQuiz' or null
 
+// Utility function to shuffle an array (Fisher-Yates algorithm)
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 onMounted(() => {
   if (authStore.isAdmin || authStore.isTeacher) {
-    // Fetch all quizzes. Backend has endpoint for this.
-    quizStore.fetchQuizzesByLessonId(''); // An empty string or null might fetch all depending on backend logic
-                                        // If backend only returns by lessonId, this needs adjustment.
-                                        // Assuming it returns all if lessonId is not provided or is empty.
+    quizStore.fetchAllQuizzes(); // Assuming this fetches all quizzes
+    lessonStore.fetchAllLessons(); // Fetch all lessons for the dropdown
   }
 });
 
@@ -263,6 +289,7 @@ const openCreateQuizModal = () => {
     lessonId: '',
     questions: [],
   };
+  selectedLessonId.value = ''; // Reset dropdown
   showQuizModal.value = true;
 };
 
@@ -277,11 +304,22 @@ const editQuiz = (quiz) => {
   currentQuiz.value.questions.forEach(q => {
     if (!q.options) q.options = [];
   });
+
+  // Shuffle questions when loading for editing
+  currentQuiz.value.questions = shuffleArray(currentQuiz.value.questions);
+
+  // Set dropdown based on existing quiz's lessonId
+  selectedLessonId.value = quiz.lessonId;
+
   showQuizModal.value = true;
 };
 
 const closeQuizModal = () => {
   showQuizModal.value = false;
+};
+
+const onLessonSelect = () => {
+  currentQuiz.value.lessonId = selectedLessonId.value;
 };
 
 const addQuestion = () => {
@@ -326,6 +364,12 @@ const resetQuestionOptions = (question) => {
 
 const saveQuiz = async () => {
   try {
+    // Basic validation for lessonId
+    if (!currentQuiz.value.lessonId) {
+      showMessage('error', 'Validation Error', 'Please select an associated Lesson.');
+      return;
+    }
+
     // Basic validation for questions and options
     for (const q of currentQuiz.value.questions) {
       if (q.questionType === 'MCQ') {
@@ -354,8 +398,7 @@ const saveQuiz = async () => {
       showMessage('success', 'Success', 'Quiz created successfully!');
     }
     closeQuizModal();
-    // Re-fetch all quizzes to update the list, or just the relevant lesson's quizzes
-    quizStore.fetchQuizzesByLessonId(''); // Assuming this fetches all
+    quizStore.fetchAllQuizzes(); // Refresh the list
   } catch (error) {
     showMessage('error', 'Error', quizStore.error || 'Failed to save quiz. Check console for details.');
   }
@@ -372,7 +415,7 @@ const deleteQuiz = async () => {
     await quizStore.deleteQuiz(quizIdToDelete.value);
     showMessage('success', 'Success', 'Quiz deleted successfully!');
     quizIdToDelete.value = null;
-    quizStore.fetchQuizzesByLessonId(''); // Refresh the list
+    quizStore.fetchAllQuizzes(); // Refresh the list
   } catch (error) {
     showMessage('error', 'Error', quizStore.error || 'Failed to delete quiz.');
   }
@@ -404,3 +447,4 @@ const showMessage = (type, title, message, confirmText = 'OK') => {
 <style scoped>
 /* No specific styles needed, Tailwind handles it */
 </style>
+

@@ -7,7 +7,8 @@
     </div>
 
     <div v-else>
-      <div class="mb-6 text-right">
+      <div class="mb-6 flex justify-between items-center">
+        <h2 class="text-2xl font-semibold text-gray-700">All Courses</h2>
         <button
           @click="openCreateCourseModal"
           class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-300"
@@ -35,6 +36,7 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modules</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
@@ -44,6 +46,7 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ course.title }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 truncate max-w-xs">{{ course.description }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ course.difficultyLevel }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ course.createdByUserId }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ course.modules ? course.modules.length : 0 }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
@@ -67,7 +70,7 @@
 
     <!-- Create/Edit Course Modal -->
     <div v-if="showCourseModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">{{ isEditing ? 'Edit Course' : 'Create New Course' }}</h2>
         <form @submit.prevent="saveCourse">
           <!-- Course Details -->
@@ -113,7 +116,7 @@
           <div class="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
             <h3 class="text-xl font-semibold text-gray-700 mb-4">Modules</h3>
             <div v-if="currentCourse.modules && currentCourse.modules.length > 0">
-              <div v-for="(module, index) in currentCourse.modules" :key="module.id || `new-${index}`" class="mb-4 p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+              <div v-for="(module, index) in currentCourse.modules" :key="module.id || `new-mod-${index}`" class="mb-4 p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
                 <div class="flex justify-between items-center mb-3">
                   <h4 class="text-lg font-semibold text-gray-800">Module {{ index + 1 }}</h4>
                   <button type="button" @click="removeModule(index)" class="text-red-500 hover:text-red-700 font-bold">
@@ -149,23 +152,19 @@
                     class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
+                  <p class="text-xs text-gray-500 mt-1">Modules are ordered by this index within the course.</p>
                 </div>
                 <div class="mb-3">
                   <label :for="`moduleLessonIds-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Lesson IDs (comma-separated):</label>
                   <input
                     type="text"
                     :id="`moduleLessonIds-${index}`"
-                    :value="module.lessonIds ? module.lessonIds.join(', ') : ''"
-                    @input="event => updateLessonIds(module, event.target.value)"
+                    v-model="module.lessonIdsString"
+                    @input="updateLessonIds(module)"
                     class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., lesson123, lesson456"
+                    placeholder="e.g., id1,id2,id3"
                   />
-                  <p class="text-xs text-gray-500 mt-1">
-                    Note: Lessons are managed separately. Enter existing lesson IDs here.
-                    <router-link v-if="currentCourse.id" :to="{ name: 'AdminLessonManagement', query: { courseId: currentCourse.id, moduleId: module.id } }" class="text-blue-600 hover:underline">
-                      Manage Lessons
-                    </router-link>
-                  </p>
+                  <p class="text-xs text-gray-500 mt-1">Enter Lesson IDs separated by commas. These will be linked to the module.</p>
                 </div>
               </div>
             </div>
@@ -252,12 +251,15 @@ const openCreateCourseModal = () => {
 
 const editCourse = (course) => {
   isEditing.value = true;
-  // Deep copy to avoid direct mutation
+  // Deep copy the course object to avoid direct mutation of store state
   currentCourse.value = JSON.parse(JSON.stringify(course));
-  // Ensure modules array exists
+  // Ensure modules array exists and convert lessonIds to string for input
   if (!currentCourse.value.modules) {
     currentCourse.value.modules = [];
   }
+  currentCourse.value.modules.forEach(mod => {
+    mod.lessonIdsString = mod.lessonIds ? mod.lessonIds.join(',') : '';
+  });
   showCourseModal.value = true;
 };
 
@@ -266,15 +268,16 @@ const closeCourseModal = () => {
 };
 
 const addModule = () => {
-  if (!currentCourse.value.modules) {
-    currentCourse.value.modules = [];
-  }
+  const newOrderIndex = currentCourse.value.modules.length > 0
+    ? Math.max(...currentCourse.value.modules.map(m => m.orderIndex)) + 1
+    : 0; // Start from 0 if no modules
   currentCourse.value.modules.push({
     id: null, // New modules won't have an ID until saved
     title: '',
     description: '',
-    orderIndex: currentCourse.value.modules.length, // Simple initial order
+    orderIndex: newOrderIndex, // Auto-populate order index
     lessonIds: [],
+    lessonIdsString: '', // For comma-separated input
   });
 };
 
@@ -282,13 +285,24 @@ const removeModule = (index) => {
   currentCourse.value.modules.splice(index, 1);
 };
 
-// Helper to convert comma-separated string to array of strings for lessonIds
-const updateLessonIds = (module, value) => {
-  module.lessonIds = value.split(',').map(id => id.trim()).filter(id => id !== '');
+// Update lessonIds array from the comma-separated string input
+const updateLessonIds = (module) => {
+  module.lessonIds = module.lessonIdsString
+    .split(',')
+    .map(id => id.trim())
+    .filter(id => id.length > 0);
 };
 
 const saveCourse = async () => {
   try {
+    // Before saving, ensure all lessonIdsString are converted back to arrays
+    currentCourse.value.modules.forEach(mod => {
+      mod.lessonIds = mod.lessonIdsString
+        .split(',')
+        .map(id => id.trim())
+        .filter(id => id.length > 0);
+    });
+
     if (isEditing.value) {
       await courseStore.updateCourse(currentCourse.value.id, currentCourse.value);
       showMessage('success', 'Success', 'Course updated successfully!');
@@ -299,7 +313,7 @@ const saveCourse = async () => {
     closeCourseModal();
     courseStore.fetchAllCourses(); // Refresh the list
   } catch (error) {
-    showMessage('error', 'Error', courseStore.error || 'Failed to save course.');
+    showMessage('error', 'Error', courseStore.error || 'Failed to save course. Check console for details.');
   }
 };
 
@@ -346,3 +360,4 @@ const showMessage = (type, title, message, confirmText = 'OK') => {
 <style scoped>
 /* No specific styles needed, Tailwind handles it */
 </style>
+

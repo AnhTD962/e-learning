@@ -79,7 +79,7 @@ const messageBoxTitle = ref('');
 const messageBoxMessage = ref('');
 
 const fetchQuizData = async () => {
-  await quizStore.fetchQuizById(lessonId.value, quizId.value);
+  await quizStore.fetchQuizById(quizId.value);
   // Reset answers and results when quiz data is fetched
   userAnswers.value = {};
   showResults.value = false;

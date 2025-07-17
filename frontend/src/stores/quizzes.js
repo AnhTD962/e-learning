@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import QuizService from '../services/quiz.service';
+import { defineStore } from "pinia";
+import QuizService from "../services/quiz.service";
 
-export const useQuizStore = defineStore('quizzes', {
+export const useQuizStore = defineStore("quizzes", {
   state: () => ({
     quizzes: [],
     currentQuiz: null,
@@ -11,6 +11,22 @@ export const useQuizStore = defineStore('quizzes', {
     error: null,
   }),
   actions: {
+    async fetchAllQuizzes() {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await QuizService.getAllQuizzes();
+        this.quizzes = response.data;
+      } catch (err) {
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to fetch all quizzes.";
+        console.error("Error fetching all quizzes:", err);
+      } finally {
+        this.loading = false;
+      }
+    },
     async fetchQuizzesByLessonId(lessonId) {
       this.loading = true;
       this.error = null;
@@ -18,22 +34,28 @@ export const useQuizStore = defineStore('quizzes', {
         const response = await QuizService.getQuizzesByLessonId(lessonId);
         this.quizzes = response.data;
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to fetch quizzes.';
-        console.error('Error fetching quizzes:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to fetch quizzes.";
+        console.error("Error fetching quizzes:", err);
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchQuizById(lessonId, quizId) {
+    async fetchQuizById(quizId) {
       this.loading = true;
       this.error = null;
       try {
-        const response = await QuizService.getQuizById(lessonId, quizId);
+        const response = await QuizService.getQuizById(null, quizId);
         this.currentQuiz = response.data;
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to fetch quiz details.';
-        console.error('Error fetching quiz details:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to fetch quiz details.";
+        console.error("Error fetching quiz details:", err);
       } finally {
         this.loading = false;
       }
@@ -47,8 +69,11 @@ export const useQuizStore = defineStore('quizzes', {
         this.quizzes.push(response.data);
         return Promise.resolve(response.data);
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to create quiz.';
-        console.error('Error creating quiz:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to create quiz.";
+        console.error("Error creating quiz:", err);
         return Promise.reject(err);
       } finally {
         this.loading = false;
@@ -60,7 +85,7 @@ export const useQuizStore = defineStore('quizzes', {
       this.error = null;
       try {
         const response = await QuizService.updateQuiz(quizId, quizData);
-        const index = this.quizzes.findIndex(q => q.id === quizId);
+        const index = this.quizzes.findIndex((q) => q.id === quizId);
         if (index !== -1) {
           this.quizzes[index] = response.data;
         }
@@ -69,8 +94,11 @@ export const useQuizStore = defineStore('quizzes', {
         }
         return Promise.resolve(response.data);
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to update quiz.';
-        console.error('Error updating quiz:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to update quiz.";
+        console.error("Error updating quiz:", err);
         return Promise.reject(err);
       } finally {
         this.loading = false;
@@ -82,11 +110,14 @@ export const useQuizStore = defineStore('quizzes', {
       this.error = null;
       try {
         const response = await QuizService.deleteQuiz(quizId);
-        this.quizzes = this.quizzes.filter(quiz => quiz.id !== quizId);
+        this.quizzes = this.quizzes.filter((quiz) => quiz.id !== quizId);
         return Promise.resolve(response.data);
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to delete quiz.';
-        console.error('Error deleting quiz:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to delete quiz.";
+        console.error("Error deleting quiz:", err);
         return Promise.reject(err);
       } finally {
         this.loading = false;
@@ -102,8 +133,11 @@ export const useQuizStore = defineStore('quizzes', {
         this.currentQuizAttempt = response.data; // Set as current attempt
         return Promise.resolve(response.data);
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to submit quiz.';
-        console.error('Error submitting quiz:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to submit quiz.";
+        console.error("Error submitting quiz:", err);
         return Promise.reject(err);
       } finally {
         this.loading = false;
@@ -117,8 +151,11 @@ export const useQuizStore = defineStore('quizzes', {
         const response = await QuizService.getUserQuizAttempts();
         this.quizAttempts = response.data;
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to fetch user quiz attempts.';
-        console.error('Error fetching user quiz attempts:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to fetch user quiz attempts.";
+        console.error("Error fetching user quiz attempts:", err);
       } finally {
         this.loading = false;
       }
@@ -131,8 +168,11 @@ export const useQuizStore = defineStore('quizzes', {
         const response = await QuizService.getQuizAttemptById(attemptId);
         this.currentQuizAttempt = response.data;
       } catch (err) {
-        this.error = err.response?.data?.message || err.message || 'Failed to fetch quiz attempt details.';
-        console.error('Error fetching quiz attempt details:', err);
+        this.error =
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to fetch quiz attempt details.";
+        console.error("Error fetching quiz attempt details:", err);
       } finally {
         this.loading = false;
       }

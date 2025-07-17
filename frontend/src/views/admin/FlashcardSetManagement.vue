@@ -154,6 +154,24 @@
                   ></textarea>
                 </div>
                 <div class="mb-3">
+                  <label :for="`cardFurigana-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Furigana:</label>
+                  <input
+                    type="text"
+                    :id="`cardFurigana-${index}`"
+                    v-model="card.furigana"
+                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label :for="`cardRomaji-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Romaji:</label>
+                  <input
+                    type="text"
+                    :id="`cardRomaji-${index}`"
+                    v-model="card.romaji"
+                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div class="mb-3">
                   <label :for="`cardExampleSentence-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Example Sentence:</label>
                   <textarea
                     :id="`cardExampleSentence-${index}`"
@@ -161,6 +179,24 @@
                     rows="2"
                     class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label :for="`cardAudioUrl-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Audio URL:</label>
+                  <input
+                    type="url"
+                    :id="`cardAudioUrl-${index}`"
+                    v-model="card.audioUrl"
+                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label :for="`cardImageUrl-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Image URL:</label>
+                  <input
+                    type="url"
+                    :id="`cardImageUrl-${index}`"
+                    v-model="card.imageUrl"
+                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
                 <div class="mb-3">
                   <label :for="`cardOrderIndex-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Order Index:</label>
@@ -171,6 +207,7 @@
                     class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
+                  <p class="text-xs text-gray-500 mt-1">Flashcards are ordered by this index within the set.</p>
                 </div>
               </div>
             </div>
@@ -244,8 +281,8 @@ const messageBoxAction = ref(null); // 'deleteFlashcardSet' or null
 
 onMounted(() => {
   if (authStore.isAdmin || authStore.isTeacher) {
-    flashcardStore.fetchFlashcardSetById(''); // Assuming this fetches all flashcard sets
-    lessonStore.fetchLessonsByModuleId(''); // Fetch all lessons for the dropdown
+    flashcardStore.fetchAllFlashcardSets(); // Assuming this fetches all flashcard sets
+    lessonStore.fetchAllLessons(); // Fetch all lessons for the dropdown
   }
 });
 
@@ -289,6 +326,11 @@ const addFlashcard = () => {
   if (!currentFlashcardSet.value.flashcards) {
     currentFlashcardSet.value.flashcards = [];
   }
+  // Calculate the next orderIndex
+  const newOrderIndex = currentFlashcardSet.value.flashcards.length > 0
+    ? Math.max(...currentFlashcardSet.value.flashcards.map(card => card.orderIndex)) + 1
+    : 0; // Start from 0 if no flashcards
+
   currentFlashcardSet.value.flashcards.push({
     id: null, // New flashcards won't have an ID until saved
     front: '',
@@ -298,7 +340,7 @@ const addFlashcard = () => {
     exampleSentence: '',
     audioUrl: '',
     imageUrl: '',
-    orderIndex: currentFlashcardSet.value.flashcards.length,
+    orderIndex: newOrderIndex, // Auto-populate order index
   });
 };
 

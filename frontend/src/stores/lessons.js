@@ -9,11 +9,24 @@ export const useLessonStore = defineStore('lessons', {
     error: null,
   }),
   actions: {
+    async fetchAllLessons() {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await LessonService.getAllLessons();
+        this.lessons = response.data;
+      } catch (err) {
+        this.error = err.response?.data?.message || err.message || 'Failed to fetch all lessons.';
+        console.error('Error fetching all lessons:', err);
+      } finally {
+        this.loading = false;
+      }
+    },
     async fetchLessonsByModuleId(courseId, moduleId) {
       this.loading = true;
       this.error = null;
       try {
-        const response = await LessonService.getLessonsByModuleId(courseId, moduleId);
+        const response = await LessonService.getLessonsByModuleId(moduleId);
         this.lessons = response.data;
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to fetch lessons.';

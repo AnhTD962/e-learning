@@ -6,7 +6,7 @@ class LessonService {
   }
 
   getLessonById(courseId, moduleId, lessonId) {
-    return api.get(`/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`);
+    return api.get(`/lessons/${lessonId}`);
   }
 
   getLessonsByModuleId(moduleId) {
@@ -22,6 +22,10 @@ class LessonService {
   deleteLesson(lessonId) {
     // Note: Backend endpoint is /api/lessons/{lessonId}
     return api.delete(`/lessons/${lessonId}`);
+  }
+
+  getAllLessons() {
+    return api.get('/lessons'); // Assuming a backend endpoint /api/lessons exists for this
   }
 }
 

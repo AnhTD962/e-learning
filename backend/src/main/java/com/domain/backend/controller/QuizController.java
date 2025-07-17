@@ -23,6 +23,12 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
+    @GetMapping("/quizzes")
+    public ResponseEntity<List<QuizResponse>> getAllQuizzes() {
+        List<QuizResponse> quizzes = quizService.getAllQuizzes();
+        return new ResponseEntity<>(quizzes, HttpStatus.OK);
+    }
+
     /**
      * Tạo một quiz mới cho một bài học cụ thể.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.

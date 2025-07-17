@@ -37,6 +37,13 @@ public class QuizService {
     @Autowired
     private QuizAttemptRepository quizAttemptRepository;
 
+    public List<QuizResponse> getAllQuizzes() {
+        List<Quiz> quizzes = quizRepository.findAll();
+        return quizzes.stream()
+                .map(this::convertToQuizResponse)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Chuyển đổi Quiz entity sang QuizResponse DTO.
      *

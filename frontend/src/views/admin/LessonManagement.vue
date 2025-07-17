@@ -120,28 +120,62 @@
                 class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
+               <p class="text-xs text-gray-500 mt-1">Lessons are ordered by this index within the module.</p>
             </div>
+
+            <!-- Course and Module Selection -->
             <div class="mb-4">
-              <label for="courseId" class="block text-gray-700 text-sm font-semibold mb-2">Course ID:</label>
+              <label for="selectCourse" class="block text-gray-700 text-sm font-semibold mb-2">Select Course:</label>
+              <select
+                id="selectCourse"
+                v-model="selectedCourseId"
+                @change="onCourseSelect"
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="">-- Select a Course --</option>
+                <option v-for="course in courseStore.courses" :key="course.id" :value="course.id">
+                  {{ course.title }} (ID: {{ course.id }})
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-4" v-if="selectedCourseId">
+              <label for="selectModule" class="block text-gray-700 text-sm font-semibold mb-2">Select Module:</label>
+              <select
+                id="selectModule"
+                v-model="selectedModuleId"
+                @change="onModuleSelect"
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="">-- Select a Module --</option>
+                <option v-for="module in filteredModules" :key="module.id" :value="module.id">
+                  {{ module.title }} (ID: {{ module.id }})
+                </option>
+              </select>
+            </div>
+            <p v-else class="text-xs text-gray-500 mt-1">Please select a course first to see its modules.</p>
+
+            <div class="mb-4">
+              <label for="courseIdDisplay" class="block text-gray-700 text-sm font-semibold mb-2">Course ID (Auto-populated):</label>
               <input
                 type="text"
-                id="courseId"
+                id="courseIdDisplay"
                 v-model="currentLesson.courseId"
-                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+                readonly
               />
-              <p class="text-xs text-gray-500 mt-1">The ID of the course this lesson belongs to.</p>
             </div>
             <div class="mb-4">
-              <label for="moduleId" class="block text-gray-700 text-sm font-semibold mb-2">Module ID:</label>
+              <label for="moduleIdDisplay" class="block text-gray-700 text-sm font-semibold mb-2">Module ID (Auto-populated):</label>
               <input
                 type="text"
-                id="moduleId"
+                id="moduleIdDisplay"
                 v-model="currentLesson.moduleId"
-                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+                readonly
               />
-              <p class="text-xs text-gray-500 mt-1">The ID of the module this lesson belongs to (within the course).</p>
             </div>
           </div>
 
@@ -235,15 +269,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useLessonStore } from '../../stores/lessons';
+import { useCourseStore } from '../../stores/courses'; // Import course store
 import { useAuthStore } from '../../stores/auth';
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
 import MessageBox from '../../components/common/MessageBox.vue';
-import { useRoute } from 'vue-router';
-const route = useRoute();
 
 const lessonStore = useLessonStore();
+const courseStore = useCourseStore(); // Initialize course store
 const authStore = useAuthStore();
 
 const showLessonModal = ref(false);
@@ -254,8 +288,8 @@ const currentLesson = ref({
   content: '',
   lessonType: 'TEXT', // Default type
   orderIndex: 0,
-  courseId: '',
-  moduleId: '',
+  courseId: '', // Will be auto-populated
+  moduleId: '', // Will be auto-populated
   quizId: null,
   flashcardSetId: null,
   videoUrl: null,
@@ -266,19 +300,46 @@ const lessonToDelete = ref({
   moduleId: null,
 });
 
+// For dropdown selection
+const selectedCourseId = ref('');
+const selectedModuleId = ref('');
+
 const showMessageBox = ref(false);
 const messageBoxType = ref('info');
 const messageBoxTitle = ref('');
 const messageBoxMessage = ref('');
 const messageBoxAction = ref(null); // 'deleteLesson' or null
 
+// Computed property to filter modules based on selected course
+const filteredModules = computed(() => {
+  if (selectedCourseId.value) {
+    const course = courseStore.courses.find(c => c.id === selectedCourseId.value);
+    // Ensure modules are sorted by orderIndex for consistent display
+    return course && course.modules ? [...course.modules].sort((a, b) => a.orderIndex - b.orderIndex) : [];
+  }
+  return [];
+});
+
+// Watcher to update orderIndex when selectedModuleId changes
+watch(selectedModuleId, (newModuleId) => {
+  if (!isEditing.value && newModuleId) { // Only auto-populate for new lessons
+    const selectedModule = filteredModules.value.find(m => m.id === newModuleId);
+    if (selectedModule) {
+      // Find the maximum orderIndex among existing lessons in this module
+      const lessonsInModule = lessonStore.lessons.filter(l => l.moduleId === newModuleId);
+      const maxOrderIndex = lessonsInModule.length > 0
+        ? Math.max(...lessonsInModule.map(l => l.orderIndex))
+        : -1; // If no lessons, start from -1 so +1 makes it 0
+      currentLesson.value.orderIndex = maxOrderIndex + 1;
+    }
+  }
+});
+
+
 onMounted(() => {
   if (authStore.isAdmin || authStore.isTeacher) {
-    const courseId = route.params.courseId;
-    const moduleId = route.params.moduleId;
-    if (courseId && moduleId) {
-      lessonStore.fetchLessonsByModuleId(courseId, moduleId);
-    }
+    lessonStore.fetchAllLessons();
+    courseStore.fetchAllCourses(); // Fetch all courses for the dropdown
   }
 });
 
@@ -289,13 +350,15 @@ const openCreateLessonModal = () => {
     title: '',
     content: '',
     lessonType: 'TEXT',
-    orderIndex: 0,
+    orderIndex: 0, // Default to 0, will be updated by watcher if module selected
     courseId: '',
     moduleId: '',
     quizId: null,
     flashcardSetId: null,
     videoUrl: null,
   };
+  selectedCourseId.value = ''; // Reset dropdowns
+  selectedModuleId.value = '';
   showLessonModal.value = true;
 };
 
@@ -303,6 +366,11 @@ const editLesson = (lesson) => {
   isEditing.value = true;
   // Deep copy the lesson object to avoid direct mutation of store state
   currentLesson.value = JSON.parse(JSON.stringify(lesson));
+
+  // Set dropdowns based on existing lesson's courseId and moduleId
+  selectedCourseId.value = lesson.courseId;
+  selectedModuleId.value = lesson.moduleId;
+
   showLessonModal.value = true;
 };
 
@@ -310,22 +378,42 @@ const closeLessonModal = () => {
   showLessonModal.value = false;
 };
 
+const onCourseSelect = () => {
+  // When course changes, reset module selection
+  selectedModuleId.value = '';
+  currentLesson.value.courseId = selectedCourseId.value;
+  currentLesson.value.moduleId = ''; // Clear module ID when course changes
+  // The watcher for selectedModuleId will handle orderIndex if a module is selected
+};
+
+const onModuleSelect = () => {
+  currentLesson.value.moduleId = selectedModuleId.value;
+  // The watcher for selectedModuleId will handle orderIndex
+};
+
 const saveLesson = async () => {
   try {
+    // Basic validation for courseId and moduleId
+    if (!currentLesson.value.courseId || !currentLesson.value.moduleId) {
+      showMessage('error', 'Validation Error', 'Please select both a Course and a Module.');
+      return;
+    }
+
     // Prepare the payload, excluding null/empty conditional fields if not applicable
     const payload = {
       title: currentLesson.value.title,
       content: currentLesson.value.content,
       lessonType: currentLesson.value.lessonType,
       orderIndex: currentLesson.value.orderIndex,
-      // quizId, flashcardSetId, videoUrl will be included if they have values
+      courseId: currentLesson.value.courseId, // Ensure IDs are sent
+      moduleId: currentLesson.value.moduleId, // Ensure IDs are sent
       ...(currentLesson.value.lessonType === 'QUIZ' && currentLesson.value.quizId && { quizId: currentLesson.value.quizId }),
       ...(currentLesson.value.lessonType === 'FLASHCARD' && currentLesson.value.flashcardSetId && { flashcardSetId: currentLesson.value.flashcardSetId }),
       ...(currentLesson.value.lessonType === 'VIDEO' && currentLesson.value.videoUrl && { videoUrl: currentLesson.value.videoUrl }),
     };
 
     if (isEditing.value) {
-      await lessonStore.updateLesson(currentLesson.value.id, currentLesson.value.courseId, currentLesson.value.moduleId, payload);
+      await lessonStore.updateLesson(currentLesson.value.id, payload);
       showMessage('success', 'Success', 'Lesson updated successfully!');
     } else {
       await lessonStore.createLesson(currentLesson.value.courseId, currentLesson.value.moduleId, payload);

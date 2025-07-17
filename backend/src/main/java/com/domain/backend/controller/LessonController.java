@@ -69,6 +69,19 @@ public class LessonController {
     }
 
     /**
+     * Lấy tất cả các bài học.
+     * Có thể truy cập bởi bất kỳ người dùng đã xác thực nào.
+     *
+     * @return ResponseEntity với danh sách LessonResponse.
+     */
+    @GetMapping("/lessons")
+    @PreAuthorize("isAuthenticated()") // Hoặc hasAnyAuthority('ADMIN', 'TEACHER', 'STUDENT')
+    public ResponseEntity<List<LessonResponse>> getAllLessons() {
+        List<LessonResponse> lessons = lessonService.getAllLessons();
+        return ResponseEntity.ok(lessons);
+    }
+
+    /**
      * Cập nhật một bài học hiện có.
      * Chỉ ADMIN hoặc TEACHER (người tạo khóa học) mới có thể truy cập.
      *

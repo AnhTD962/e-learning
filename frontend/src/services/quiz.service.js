@@ -5,8 +5,8 @@ class QuizService {
     return api.post(`/lessons/${lessonId}/quizzes`, quizData);
   }
 
-  getQuizById(lessonId, quizId) {
-    return api.get(`/lessons/${lessonId}/quizzes/${quizId}`);
+  getQuizById(quizId) {
+    return api.get(`/quizzes/${quizId}`);
   }
 
   getQuizzesByLessonId(lessonId) {
@@ -31,6 +31,10 @@ class QuizService {
 
   getQuizAttemptById(attemptId) {
     return api.get(`/quizzes/quiz-attempts/${attemptId}`);
+  }
+
+  getAllQuizzes() {
+    return api.get('/quizzes'); // Assuming a backend endpoint /api/quizzes exists for this
   }
 }
 

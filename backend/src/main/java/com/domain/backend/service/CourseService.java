@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -71,12 +72,14 @@ public class CourseService {
     private CourseModule convertModuleRequestToModule(ModuleRequest moduleRequest) {
         CourseModule courseModule = new CourseModule();
         BeanUtils.copyProperties(moduleRequest, courseModule);
-        // Đảm bảo rằng nếu có ID được cung cấp cho một courseModule hiện có, nó sẽ được sao chép.
-        if (moduleRequest.getId() != null) {
+        if (moduleRequest.getId() == null || moduleRequest.getId().isEmpty()) {
+            courseModule.setId(UUID.randomUUID().toString());
+        } else {
             courseModule.setId(moduleRequest.getId());
         }
         return courseModule;
     }
+
 
     /**
      * Tạo một khóa học mới.
