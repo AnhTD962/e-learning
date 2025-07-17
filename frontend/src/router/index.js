@@ -24,6 +24,7 @@ import AchievementManagement from '../views/admin/AchievementManagement.vue';
 import ContentModeration from '../views/admin/ContentModeration.vue';
 import StudySessionOverview from '../views/admin/StudySessionManagement.vue';
 import ProgressOverview from '../views/MyProgress.vue';
+import AdminLessonManagement from '../views/admin/LessonManagement.vue'; 
 
 
 const routes = [
@@ -106,7 +107,7 @@ const routes = [
     path: '/admin/courses',
     name: 'AdminCourseManagement',
     component: CourseManagement,
-    meta: { requiresAuth: true, requiresAdmin: true }
+    meta: { requiresAuth: true, roles: ['ADMIN', 'TEACHER'] }
   },
   {
     path: '/admin/quizzes',
@@ -154,6 +155,12 @@ const routes = [
     path: '/admin/study-sessions',
     name: 'AdminStudySessionOverview',
     component: StudySessionOverview,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/lessons',
+    name: 'AdminLessonManagement',
+    component: AdminLessonManagement,
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {

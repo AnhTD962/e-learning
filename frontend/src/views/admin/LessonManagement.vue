@@ -240,6 +240,8 @@ import { useLessonStore } from '../../stores/lessons';
 import { useAuthStore } from '../../stores/auth';
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
 import MessageBox from '../../components/common/MessageBox.vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 const lessonStore = useLessonStore();
 const authStore = useAuthStore();
@@ -272,7 +274,11 @@ const messageBoxAction = ref(null); // 'deleteLesson' or null
 
 onMounted(() => {
   if (authStore.isAdmin || authStore.isTeacher) {
-    lessonStore.fetchAllLessons(); // Assuming this fetches all lessons
+    const courseId = route.params.courseId;
+    const moduleId = route.params.moduleId;
+    if (courseId && moduleId) {
+      lessonStore.fetchLessonsByModuleId(courseId, moduleId);
+    }
   }
 });
 

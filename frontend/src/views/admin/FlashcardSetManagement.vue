@@ -93,18 +93,32 @@
                 class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               ></textarea>
             </div>
+
+            <!-- Lesson Selection -->
             <div class="mb-4">
-              <label for="setLessonId" class="block text-gray-700 text-sm font-semibold mb-2">Associated Lesson ID:</label>
-              <input
-                type="text"
-                id="setLessonId"
-                v-model="currentFlashcardSet.lessonId"
+              <label for="selectLesson" class="block text-gray-700 text-sm font-semibold mb-2">Select Associated Lesson:</label>
+              <select
+                id="selectLesson"
+                v-model="selectedLessonId"
+                @change="onLessonSelect"
                 class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
+              >
+                <option value="">-- Select a Lesson --</option>
+                <option v-for="lesson in lessonStore.lessons" :key="lesson.id" :value="lesson.id">
+                  {{ lesson.title }} (ID: {{ lesson.id }})
+                </option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="lessonIdDisplay" class="block text-gray-700 text-sm font-semibold mb-2">Lesson ID (Auto-populated):</label>
+              <input
+                type="text"
+                id="lessonIdDisplay"
+                v-model="currentFlashcardSet.lessonId"
+                class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+                readonly
               />
-              <p class="text-xs text-gray-500 mt-1">
-                The ID of the lesson this flashcard set belongs to.
-              </p>
             </div>
           </div>
 
@@ -140,24 +154,6 @@
                   ></textarea>
                 </div>
                 <div class="mb-3">
-                  <label :for="`cardFurigana-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Furigana:</label>
-                  <input
-                    type="text"
-                    :id="`cardFurigana-${index}`"
-                    v-model="card.furigana"
-                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label :for="`cardRomaji-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Romaji:</label>
-                  <input
-                    type="text"
-                    :id="`cardRomaji-${index}`"
-                    v-model="card.romaji"
-                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div class="mb-3">
                   <label :for="`cardExampleSentence-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Example Sentence:</label>
                   <textarea
                     :id="`cardExampleSentence-${index}`"
@@ -165,24 +161,6 @@
                     rows="2"
                     class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   ></textarea>
-                </div>
-                <div class="mb-3">
-                  <label :for="`cardAudioUrl-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Audio URL:</label>
-                  <input
-                    type="url"
-                    :id="`cardAudioUrl-${index}`"
-                    v-model="card.audioUrl"
-                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label :for="`cardImageUrl-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Image URL:</label>
-                  <input
-                    type="url"
-                    :id="`cardImageUrl-${index}`"
-                    v-model="card.imageUrl"
-                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
                 </div>
                 <div class="mb-3">
                   <label :for="`cardOrderIndex-${index}`" class="block text-gray-700 text-sm font-semibold mb-2">Order Index:</label>
@@ -235,11 +213,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useFlashcardStore } from '../../stores/flashcards';
+import { useLessonStore } from '../../stores/lessons'; // Import lesson store
 import { useAuthStore } from '../../stores/auth';
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
 import MessageBox from '../../components/common/MessageBox.vue';
 
 const flashcardStore = useFlashcardStore();
+const lessonStore = useLessonStore(); // Initialize lesson store
 const authStore = useAuthStore();
 
 const showFlashcardSetModal = ref(false);
@@ -248,10 +228,13 @@ const currentFlashcardSet = ref({
   id: null,
   title: '',
   description: '',
-  lessonId: '',
+  lessonId: '', // Will be auto-populated
   flashcards: [],
 });
 const flashcardSetIdToDelete = ref(null);
+
+// For dropdown selection
+const selectedLessonId = ref('');
 
 const showMessageBox = ref(false);
 const messageBoxType = ref('info');
@@ -261,8 +244,8 @@ const messageBoxAction = ref(null); // 'deleteFlashcardSet' or null
 
 onMounted(() => {
   if (authStore.isAdmin || authStore.isTeacher) {
-    // Fetch all flashcard sets. Backend has endpoint for this.
-    flashcardStore.fetchFlashcardSetsByLessonId(''); // An empty string or null might fetch all depending on backend logic
+    flashcardStore.fetchFlashcardSetById(''); // Assuming this fetches all flashcard sets
+    lessonStore.fetchLessonsByModuleId(''); // Fetch all lessons for the dropdown
   }
 });
 
@@ -275,6 +258,7 @@ const openCreateFlashcardSetModal = () => {
     lessonId: '',
     flashcards: [],
   };
+  selectedLessonId.value = ''; // Reset dropdown
   showFlashcardSetModal.value = true;
 };
 
@@ -286,11 +270,19 @@ const editFlashcardSet = (set) => {
   if (!currentFlashcardSet.value.flashcards) {
     currentFlashcardSet.value.flashcards = [];
   }
+
+  // Set dropdown based on existing flashcard set's lessonId
+  selectedLessonId.value = set.lessonId;
+
   showFlashcardSetModal.value = true;
 };
 
 const closeFlashcardSetModal = () => {
   showFlashcardSetModal.value = false;
+};
+
+const onLessonSelect = () => {
+  currentFlashcardSet.value.lessonId = selectedLessonId.value;
 };
 
 const addFlashcard = () => {
@@ -316,6 +308,12 @@ const removeFlashcard = (index) => {
 
 const saveFlashcardSet = async () => {
   try {
+    // Basic validation for lessonId
+    if (!currentFlashcardSet.value.lessonId) {
+      showMessage('error', 'Validation Error', 'Please select an associated Lesson.');
+      return;
+    }
+
     if (isEditing.value) {
       await flashcardStore.updateFlashcardSet(currentFlashcardSet.value.id, currentFlashcardSet.value);
       showMessage('success', 'Success', 'Flashcard set updated successfully!');
@@ -325,8 +323,7 @@ const saveFlashcardSet = async () => {
       showMessage('success', 'Success', 'Flashcard set created successfully!');
     }
     closeFlashcardSetModal();
-    // Re-fetch all flashcard sets to update the list
-    flashcardStore.fetchFlashcardSetsByLessonId(''); // Assuming this fetches all
+    flashcardStore.fetchAllFlashcardSets(); // Refresh the list
   } catch (error) {
     showMessage('error', 'Error', flashcardStore.error || 'Failed to save flashcard set. Check console for details.');
   }
@@ -343,7 +340,7 @@ const deleteFlashcardSet = async () => {
     await flashcardStore.deleteFlashcardSet(flashcardSetIdToDelete.value);
     showMessage('success', 'Success', 'Flashcard set deleted successfully!');
     flashcardSetIdToDelete.value = null;
-    flashcardStore.fetchFlashcardSetsByLessonId(''); // Refresh the list
+    flashcardStore.fetchAllFlashcardSets(); // Refresh the list
   } catch (error) {
     showMessage('error', 'Error', flashcardStore.error || 'Failed to delete flashcard set.');
   }
@@ -375,3 +372,4 @@ const showMessage = (type, title, message, confirmText = 'OK') => {
 <style scoped>
 /* No specific styles needed, Tailwind handles it */
 </style>
+
