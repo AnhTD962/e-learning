@@ -1,10 +1,10 @@
 package com.domain.backend.security;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -65,6 +65,7 @@ public class SecurityUtils {
 
     /**
      * Kiểm tra xem người dùng hiện tại có phải là ADMIN hay không.
+     *
      * @return True nếu là ADMIN, ngược lại là false.
      */
     public static boolean isAdmin() {
@@ -73,6 +74,7 @@ public class SecurityUtils {
 
     /**
      * Kiểm tra xem người dùng hiện tại có phải là TEACHER hay không.
+     *
      * @return True nếu là TEACHER, ngược lại là false.
      */
     public static boolean isTeacher() {
@@ -81,6 +83,7 @@ public class SecurityUtils {
 
     /**
      * Kiểm tra xem người dùng hiện tại có phải là STUDENT hay không.
+     *
      * @return True nếu là STUDENT, ngược lại là false.
      */
     public static boolean isStudent() {

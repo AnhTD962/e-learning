@@ -29,7 +29,7 @@ public class ContentModerationService {
      * @param moderationLog Đối tượng ContentModeration cần tạo.
      * @return ContentModeration đã tạo.
      * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
-     * @throws ValidationException nếu dữ liệu đầu vào không hợp lệ.
+     * @throws ValidationException   nếu dữ liệu đầu vào không hợp lệ.
      */
     public ContentModeration createModerationLog(ContentModeration moderationLog) {
         if (!SecurityUtils.isAdmin()) {
@@ -73,7 +73,7 @@ public class ContentModerationService {
      * Lấy các bản ghi kiểm duyệt nội dung theo loại thực thể và ID thực thể.
      *
      * @param entityType Loại thực thể.
-     * @param entityId ID thực thể.
+     * @param entityId   ID thực thể.
      * @return Danh sách ContentModeration phù hợp.
      */
     public List<ContentModeration> getModerationLogsByEntity(String entityType, String entityId) {
@@ -86,11 +86,11 @@ public class ContentModerationService {
     /**
      * Cập nhật một bản ghi kiểm duyệt nội dung hiện có.
      *
-     * @param id ID của bản ghi cần cập nhật.
+     * @param id         ID của bản ghi cần cập nhật.
      * @param updatedLog Đối tượng ContentModeration với thông tin cập nhật.
      * @return ContentModeration đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy bản ghi.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public ContentModeration updateModerationLog(String id, ContentModeration updatedLog) {
         if (!SecurityUtils.isAdmin()) {
@@ -113,7 +113,7 @@ public class ContentModerationService {
      * @param id ID của bản ghi cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy bản ghi.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public MessageResponse deleteModerationLog(String id) {
         if (!SecurityUtils.isAdmin()) {

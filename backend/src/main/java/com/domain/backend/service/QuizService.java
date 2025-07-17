@@ -39,6 +39,7 @@ public class QuizService {
 
     /**
      * Chuyển đổi Quiz entity sang QuizResponse DTO.
+     *
      * @param quiz Entity Quiz.
      * @return QuizResponse DTO.
      */
@@ -55,6 +56,7 @@ public class QuizService {
 
     /**
      * Chuyển đổi Question entity sang QuestionResponse DTO.
+     *
      * @param question Entity Question.
      * @return QuestionResponse DTO.
      */
@@ -69,6 +71,7 @@ public class QuizService {
 
     /**
      * Chuyển đổi QuizAttempt entity sang QuizAttemptResponse DTO.
+     *
      * @param attempt Entity QuizAttempt.
      * @return QuizAttemptResponse DTO.
      */
@@ -118,12 +121,12 @@ public class QuizService {
     /**
      * Tạo một quiz mới và liên kết nó với một bài học.
      *
-     * @param lessonId ID của bài học mà quiz này thuộc về.
+     * @param lessonId    ID của bài học mà quiz này thuộc về.
      * @param quizRequest Payload yêu cầu để tạo quiz.
      * @return Đối tượng QuizResponse đã tạo.
      * @throws ResourceNotFoundException nếu không tìm thấy bài học.
-     * @throws ValidationException nếu bài học đã có quiz liên kết.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws ValidationException       nếu bài học đã có quiz liên kết.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     @Transactional // Đảm bảo tính nguyên tử cho các hoạt động liên quan đến nhiều tài liệu
     public QuizResponse createQuiz(String lessonId, QuizRequest quizRequest) {
@@ -188,11 +191,11 @@ public class QuizService {
     /**
      * Cập nhật một quiz hiện có.
      *
-     * @param quizId ID của quiz cần cập nhật.
+     * @param quizId      ID của quiz cần cập nhật.
      * @param quizRequest Payload yêu cầu để cập nhật quiz.
      * @return Đối tượng QuizResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy quiz.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public QuizResponse updateQuiz(String quizId, QuizRequest quizRequest) {
         // Kiểm tra ủy quyền: chỉ ADMIN hoặc TEACHER mới có thể cập nhật quiz
@@ -225,7 +228,7 @@ public class QuizService {
      * @param quizId ID của quiz cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy quiz.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     @Transactional
     public MessageResponse deleteQuiz(String quizId) {
@@ -256,7 +259,7 @@ public class QuizService {
      * @param submitQuizRequest Yêu cầu chứa ID quiz và câu trả lời của người dùng.
      * @return Đối tượng QuizAttemptResponse với điểm số và kết quả.
      * @throws ResourceNotFoundException nếu không tìm thấy quiz.
-     * @throws ValidationException nếu câu trả lời không hợp lệ.
+     * @throws ValidationException       nếu câu trả lời không hợp lệ.
      */
     public QuizAttemptResponse submitQuiz(SubmitQuizRequest submitQuizRequest) {
         String userId = SecurityUtils.getCurrentUserId();

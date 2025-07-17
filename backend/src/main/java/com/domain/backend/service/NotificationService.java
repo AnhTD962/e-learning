@@ -36,7 +36,7 @@ public class NotificationService {
     /**
      * Gửi thông báo cho một người dùng cụ thể.
      *
-     * @param userId ID của người dùng nhận thông báo.
+     * @param userId  ID của người dùng nhận thông báo.
      * @param subject Chủ đề thông báo.
      * @param message Nội dung thông báo.
      * @return MessageResponse thành công hoặc lỗi.

@@ -1,9 +1,8 @@
 package com.domain.backend.dto.request;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 @Data // Lombok annotation
 public class LoginRequest {

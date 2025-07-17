@@ -19,7 +19,7 @@ public class KanjiEntry {
     private String onyomi; // Âm đọc On'yomi
     private String kunyomi; // Âm đọc Kun'yomi
     private String meaning; // Nghĩa tiếng Anh
-    private  String furigana; // Furigana
+    private String furigana; // Furigana
     private int strokeCount; // Số nét
     private String strokeOrderSvg; // Dữ liệu SVG cho thứ tự nét
     private List<String> examples; // Các từ ví dụ sử dụng Kanji này

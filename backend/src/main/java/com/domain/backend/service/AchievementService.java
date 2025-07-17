@@ -41,6 +41,7 @@ public class AchievementService {
 
     /**
      * Chuyển đổi Achievement entity sang AchievementResponse DTO.
+     *
      * @param achievement Entity Achievement.
      * @return AchievementResponse DTO.
      */
@@ -57,7 +58,7 @@ public class AchievementService {
      * @param achievement Đối tượng Achievement cần tạo.
      * @return AchievementResponse đã tạo.
      * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
-     * @throws ValidationException nếu tên thành tích đã tồn tại.
+     * @throws ValidationException   nếu tên thành tích đã tồn tại.
      */
     public AchievementResponse createAchievement(Achievement achievement) {
         if (!SecurityUtils.isAdmin()) {
@@ -72,6 +73,7 @@ public class AchievementService {
 
     /**
      * Lấy một thành tích theo ID.
+     *
      * @param id ID của thành tích.
      * @return Optional chứa AchievementResponse nếu tìm thấy.
      */
@@ -82,6 +84,7 @@ public class AchievementService {
 
     /**
      * Lấy tất cả các thành tích.
+     *
      * @return Danh sách AchievementResponse.
      */
     public List<AchievementResponse> getAllAchievements() {
@@ -94,11 +97,11 @@ public class AchievementService {
      * Cập nhật một thành tích hiện có.
      * Chỉ ADMIN mới có thể cập nhật.
      *
-     * @param id ID của thành tích cần cập nhật.
+     * @param id                 ID của thành tích cần cập nhật.
      * @param updatedAchievement Đối tượng Achievement với thông tin cập nhật.
      * @return AchievementResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy thành tích.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public AchievementResponse updateAchievement(String id, Achievement updatedAchievement) {
         if (!SecurityUtils.isAdmin()) {
@@ -125,7 +128,7 @@ public class AchievementService {
      * @param id ID của thành tích cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy thành tích.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public MessageResponse deleteAchievement(String id) {
         if (!SecurityUtils.isAdmin()) {
@@ -141,11 +144,11 @@ public class AchievementService {
      * Trao một thành tích cho người dùng.
      * Thường được gọi nội bộ khi người dùng đáp ứng tiêu chí.
      *
-     * @param userId ID của người dùng.
+     * @param userId        ID của người dùng.
      * @param achievementId ID của thành tích.
      * @return MessageResponse thành công hoặc lỗi.
      * @throws ResourceNotFoundException nếu người dùng hoặc thành tích không tìm thấy.
-     * @throws ValidationException nếu thành tích đã được trao cho người dùng.
+     * @throws ValidationException       nếu thành tích đã được trao cho người dùng.
      */
     public MessageResponse grantAchievementToUser(String userId, String achievementId) {
         User user = userRepository.findById(userId)

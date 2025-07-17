@@ -18,6 +18,7 @@ public class ValidationUtils {
 
     /**
      * Xác thực định dạng email.
+     *
      * @param email Chuỗi email cần xác thực.
      * @throws ValidationException nếu email không hợp lệ.
      */
@@ -32,7 +33,8 @@ public class ValidationUtils {
 
     /**
      * Xác thực độ dài mật khẩu.
-     * @param password Chuỗi mật khẩu cần xác thực.
+     *
+     * @param password  Chuỗi mật khẩu cần xác thực.
      * @param minLength Độ dài tối thiểu.
      * @param maxLength Độ dài tối đa.
      * @throws ValidationException nếu mật khẩu không đáp ứng yêu cầu độ dài.
@@ -48,7 +50,8 @@ public class ValidationUtils {
 
     /**
      * Xác thực rằng một chuỗi không rỗng hoặc chỉ chứa khoảng trắng.
-     * @param value Chuỗi cần xác thực.
+     *
+     * @param value     Chuỗi cần xác thực.
      * @param fieldName Tên trường để sử dụng trong thông báo lỗi.
      * @throws ValidationException nếu chuỗi rỗng hoặc chỉ chứa khoảng trắng.
      */
@@ -60,7 +63,8 @@ public class ValidationUtils {
 
     /**
      * Xác thực rằng một đối tượng không phải là null.
-     * @param object Đối tượng cần xác thực.
+     *
+     * @param object    Đối tượng cần xác thực.
      * @param fieldName Tên trường để sử dụng trong thông báo lỗi.
      * @throws ValidationException nếu đối tượng là null.
      */
@@ -72,7 +76,8 @@ public class ValidationUtils {
 
     /**
      * Xác thực rằng một giá trị số không âm.
-     * @param value Giá trị số cần xác thực.
+     *
+     * @param value     Giá trị số cần xác thực.
      * @param fieldName Tên trường để sử dụng trong thông báo lỗi.
      * @throws ValidationException nếu giá trị âm.
      */

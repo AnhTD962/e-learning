@@ -80,7 +80,7 @@ public class JapaneseTextController {
      * Cập nhật một entry từ vựng hiện có.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.
      *
-     * @param id ID của entry từ vựng cần cập nhật.
+     * @param id              ID của entry từ vựng cần cập nhật.
      * @param vocabularyEntry Đối tượng VocabularyEntry với thông tin cập nhật.
      * @return ResponseEntity với VocabularyEntry đã cập nhật.
      */

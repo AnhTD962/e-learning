@@ -1,6 +1,5 @@
 package com.domain.backend.dto.response;
 
-import com.domain.backend.entity.KanjiEntry;
 import com.domain.backend.entity.VocabularyEntry;
 import lombok.AllArgsConstructor;
 import lombok.Data;

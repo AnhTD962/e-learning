@@ -67,7 +67,7 @@ public class CourseController {
      * Cập nhật một khóa học hiện có.
      * Chỉ ADMIN hoặc TEACHER (người tạo khóa học) mới có thể truy cập.
      *
-     * @param id ID của khóa học cần cập nhật.
+     * @param id            ID của khóa học cần cập nhật.
      * @param courseRequest Payload yêu cầu để cập nhật khóa học.
      * @return ResponseEntity với CourseResponse đã cập nhật.
      */

@@ -23,8 +23,8 @@ public class StudySessionController {
      * Bắt đầu một phiên học mới.
      * Có thể truy cập bởi bất kỳ người dùng đã xác thực nào.
      *
-     * @param lessonId Tùy chọn: ID của bài học đang học.
-     * @param courseId Tùy chọn: ID của khóa học đang học.
+     * @param lessonId     Tùy chọn: ID của bài học đang học.
+     * @param courseId     Tùy chọn: ID của khóa học đang học.
      * @param activityType Loại hoạt động (ví dụ: "LESSON_READING", "QUIZ", "FLASHCARD_REVIEW").
      * @return ResponseEntity với StudySession đã tạo.
      */

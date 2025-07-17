@@ -25,8 +25,8 @@ public class LessonController {
      * Tạo một bài học mới trong một module cụ thể của một khóa học.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.
      *
-     * @param courseId ID của khóa học.
-     * @param moduleId ID của module.
+     * @param courseId      ID của khóa học.
+     * @param moduleId      ID của module.
      * @param lessonRequest Payload yêu cầu để tạo bài học.
      * @return ResponseEntity với LessonResponse đã tạo.
      */
@@ -72,7 +72,7 @@ public class LessonController {
      * Cập nhật một bài học hiện có.
      * Chỉ ADMIN hoặc TEACHER (người tạo khóa học) mới có thể truy cập.
      *
-     * @param lessonId ID của bài học cần cập nhật.
+     * @param lessonId      ID của bài học cần cập nhật.
      * @param lessonRequest Payload yêu cầu để cập nhật bài học.
      * @return ResponseEntity với LessonResponse đã cập nhật.
      */

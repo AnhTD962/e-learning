@@ -34,6 +34,7 @@ public class KanjiUtils {
 
     /**
      * Kiểm tra xem một ký tự có phải là Kanji hay không.
+     *
      * @param c Ký tự cần kiểm tra.
      * @return True nếu là Kanji, ngược lại là false.
      */
@@ -44,6 +45,7 @@ public class KanjiUtils {
     /**
      * Lấy danh sách các bộ thủ (radicals) của một Kanji (giả lập).
      * Đây cũng là một hàm giả lập. Dữ liệu thực tế cần một nguồn bên ngoài.
+     *
      * @param kanjiCharacter Ký tự Kanji.
      * @return Danh sách các bộ thủ.
      */

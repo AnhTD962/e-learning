@@ -83,7 +83,7 @@ public class KanjiController {
      * Cập nhật một entry Kanji hiện có.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.
      *
-     * @param id ID của entry Kanji cần cập nhật.
+     * @param id         ID của entry Kanji cần cập nhật.
      * @param kanjiEntry Đối tượng KanjiEntry với thông tin cập nhật.
      * @return ResponseEntity với KanjiResponse đã cập nhật.
      */

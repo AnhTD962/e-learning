@@ -38,6 +38,7 @@ public class FlashcardService {
 
     /**
      * Chuyển đổi FlashcardSet entity sang FlashcardSetResponse DTO.
+     *
      * @param flashcardSet Entity FlashcardSet.
      * @return FlashcardSetResponse DTO.
      */
@@ -56,6 +57,7 @@ public class FlashcardService {
 
     /**
      * Chuyển đổi Flashcard entity sang FlashcardResponse DTO.
+     *
      * @param flashcard Entity Flashcard.
      * @return FlashcardResponse DTO.
      */
@@ -84,12 +86,12 @@ public class FlashcardService {
     /**
      * Tạo một bộ flashcard mới và liên kết nó với một bài học.
      *
-     * @param lessonId ID của bài học mà bộ flashcard này thuộc về.
+     * @param lessonId            ID của bài học mà bộ flashcard này thuộc về.
      * @param flashcardSetRequest Payload yêu cầu để tạo bộ flashcard.
      * @return Đối tượng FlashcardSetResponse đã tạo.
      * @throws ResourceNotFoundException nếu không tìm thấy bài học.
-     * @throws ValidationException nếu bài học đã có bộ flashcard liên kết.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws ValidationException       nếu bài học đã có bộ flashcard liên kết.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     @Transactional // Đảm bảo tính nguyên tử cho các hoạt động liên quan đến nhiều tài liệu
     public FlashcardSetResponse createFlashcardSet(String lessonId, FlashcardSetRequest flashcardSetRequest) {
@@ -156,11 +158,11 @@ public class FlashcardService {
     /**
      * Cập nhật một bộ flashcard hiện có.
      *
-     * @param flashcardSetId ID của bộ flashcard cần cập nhật.
+     * @param flashcardSetId      ID của bộ flashcard cần cập nhật.
      * @param flashcardSetRequest Payload yêu cầu để cập nhật bộ flashcard.
      * @return Đối tượng FlashcardSetResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy bộ flashcard.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public FlashcardSetResponse updateFlashcardSet(String flashcardSetId, FlashcardSetRequest flashcardSetRequest) {
         // Kiểm tra ủy quyền: chỉ ADMIN hoặc TEACHER mới có thể cập nhật flashcard set
@@ -192,7 +194,7 @@ public class FlashcardService {
      * @param flashcardSetId ID của bộ flashcard cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy bộ flashcard.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     @Transactional
     public MessageResponse deleteFlashcardSet(String flashcardSetId) {

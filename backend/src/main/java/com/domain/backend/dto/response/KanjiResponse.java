@@ -1,6 +1,7 @@
 package com.domain.backend.dto.response;
 
 import lombok.Data;
+
 import java.util.List;
 
 @Data

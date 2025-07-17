@@ -39,7 +39,7 @@ public class ProgressController {
      * Có thể truy cập bởi bất kỳ người dùng đã xác thực nào.
      *
      * @param courseId ID của khóa học.
-     * @param request Yêu cầu chứa ID bài học để đánh dấu hoàn thành.
+     * @param request  Yêu cầu chứa ID bài học để đánh dấu hoàn thành.
      * @return ResponseEntity với ProgressResponse đã cập nhật.
      */
     @PostMapping("/courses/{courseId}/complete-lesson")

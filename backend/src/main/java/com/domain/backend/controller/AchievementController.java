@@ -67,7 +67,7 @@ public class AchievementController {
      * Cập nhật một thành tích hiện có.
      * Chỉ ADMIN mới có thể truy cập.
      *
-     * @param id ID của thành tích cần cập nhật.
+     * @param id          ID của thành tích cần cập nhật.
      * @param achievement Đối tượng Achievement với thông tin cập nhật.
      * @return ResponseEntity với AchievementResponse đã cập nhật.
      */
@@ -97,7 +97,7 @@ public class AchievementController {
      * Chỉ ADMIN mới có thể truy cập.
      * (Thường được gọi nội bộ bởi hệ thống, nhưng có thể có endpoint thủ công cho ADMIN)
      *
-     * @param userId ID của người dùng.
+     * @param userId        ID của người dùng.
      * @param achievementId ID của thành tích.
      * @return ResponseEntity với MessageResponse thành công.
      */

@@ -10,7 +10,10 @@ import java.util.List;
 @Repository
 public interface StudySessionRepository extends MongoRepository<StudySession, String> {
     List<StudySession> findByUserId(String userId);
+
     List<StudySession> findByUserIdAndStartTimeBetween(String userId, LocalDateTime start, LocalDateTime end);
+
     List<StudySession> findByLessonId(String lessonId);
+
     List<StudySession> findByCourseId(String courseId);
 }

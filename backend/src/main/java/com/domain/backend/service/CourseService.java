@@ -31,6 +31,7 @@ public class CourseService {
 
     /**
      * Chuyển đổi Course entity sang CourseResponse DTO.
+     *
      * @param course Entity Course.
      * @return CourseResponse DTO.
      */
@@ -51,6 +52,7 @@ public class CourseService {
 
     /**
      * Chuyển đổi CourseModule entity sang ModuleResponse DTO.
+     *
      * @param courseModule Entity CourseModule.
      * @return ModuleResponse DTO.
      */
@@ -132,11 +134,11 @@ public class CourseService {
     /**
      * Cập nhật một khóa học hiện có.
      *
-     * @param id ID của khóa học cần cập nhật.
+     * @param id            ID của khóa học cần cập nhật.
      * @param courseRequest Payload yêu cầu để cập nhật khóa học.
      * @return Đối tượng CourseResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy khóa học.
-     * @throws UnauthorizedException nếu người dùng không được ủy quyền.
+     * @throws UnauthorizedException     nếu người dùng không được ủy quyền.
      */
     public CourseResponse updateCourse(String id, CourseRequest courseRequest) {
         Course existingCourse = courseRepository.findById(id)
@@ -172,7 +174,7 @@ public class CourseService {
      * @param id ID của khóa học cần xóa.
      * @return ResponseEntity với thông báo thành công hoặc lỗi.
      * @throws ResourceNotFoundException nếu không tìm thấy khóa học.
-     * @throws UnauthorizedException nếu người dùng không được ủy quyền.
+     * @throws UnauthorizedException     nếu người dùng không được ủy quyền.
      */
     public MessageResponse deleteCourse(String id) {
         Course existingCourse = courseRepository.findById(id)

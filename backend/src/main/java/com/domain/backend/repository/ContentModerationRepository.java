@@ -9,7 +9,10 @@ import java.util.List;
 @Repository
 public interface ContentModerationRepository extends MongoRepository<ContentModeration, String> {
     List<ContentModeration> findByEntityTypeAndEntityId(String entityType, String entityId);
+
     List<ContentModeration> findByModerationAction(String moderationAction);
+
     List<ContentModeration> findByReportedByUserId(String reportedByUserId);
+
     List<ContentModeration> findByModeratedByUserId(String moderatedByUserId);
 }

@@ -38,6 +38,7 @@ public class KanjiService {
 
     /**
      * Chuyển đổi KanjiEntry entity sang KanjiResponse DTO.
+     *
      * @param kanjiEntry Entity KanjiEntry.
      * @return KanjiResponse DTO.
      */
@@ -53,7 +54,7 @@ public class KanjiService {
      *
      * @param kanjiEntry Đối tượng KanjiEntry cần tạo.
      * @return KanjiResponse của entry đã tạo.
-     * @throws ValidationException nếu ký tự Kanji đã tồn tại.
+     * @throws ValidationException   nếu ký tự Kanji đã tồn tại.
      * @throws UnauthorizedException nếu người dùng không được phép.
      */
     public KanjiResponse createKanjiEntry(KanjiEntry kanjiEntry) {
@@ -73,6 +74,7 @@ public class KanjiService {
 
     /**
      * Lấy một entry Kanji theo ID.
+     *
      * @param id ID của entry Kanji.
      * @return Optional chứa KanjiResponse nếu tìm thấy.
      */
@@ -83,6 +85,7 @@ public class KanjiService {
 
     /**
      * Lấy một entry Kanji theo ký tự Kanji.
+     *
      * @param kanjiCharacter Ký tự Kanji.
      * @return Optional chứa KanjiResponse nếu tìm thấy.
      */
@@ -93,6 +96,7 @@ public class KanjiService {
 
     /**
      * Lấy tất cả các entry Kanji.
+     *
      * @return Danh sách KanjiResponse.
      */
     public List<KanjiResponse> getAllKanjiEntries() {
@@ -105,11 +109,11 @@ public class KanjiService {
      * Cập nhật một entry Kanji hiện có.
      * Chỉ ADMIN hoặc TEACHER mới có thể cập nhật.
      *
-     * @param id ID của entry Kanji cần cập nhật.
+     * @param id                ID của entry Kanji cần cập nhật.
      * @param updatedKanjiEntry Đối tượng KanjiEntry với thông tin cập nhật.
      * @return KanjiResponse của entry đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy entry.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public KanjiResponse updateKanjiEntry(String id, KanjiEntry updatedKanjiEntry) {
         if (!SecurityUtils.isAdmin() && !SecurityUtils.isTeacher()) {
@@ -143,7 +147,7 @@ public class KanjiService {
      * @param id ID của entry Kanji cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy entry.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public MessageResponse deleteKanjiEntry(String id) {
         if (!SecurityUtils.isAdmin() && !SecurityUtils.isTeacher()) {

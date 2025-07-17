@@ -30,8 +30,8 @@ public class StudySessionService {
     /**
      * Bắt đầu một phiên học mới.
      *
-     * @param lessonId Tùy chọn: ID của bài học đang học.
-     * @param courseId Tùy chọn: ID của khóa học đang học.
+     * @param lessonId     Tùy chọn: ID của bài học đang học.
+     * @param courseId     Tùy chọn: ID của khóa học đang học.
      * @param activityType Loại hoạt động (ví dụ: "LESSON_READING", "QUIZ", "FLASHCARD_REVIEW").
      * @return StudySession đã tạo.
      */
@@ -52,7 +52,7 @@ public class StudySessionService {
      * @param sessionId ID của phiên học cần kết thúc.
      * @return StudySession đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy phiên học.
-     * @throws UnauthorizedException nếu người dùng không phải là chủ sở hữu phiên hoặc ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là chủ sở hữu phiên hoặc ADMIN.
      */
     public StudySession endStudySession(String sessionId) {
         StudySession session = studySessionRepository.findById(sessionId)
@@ -113,7 +113,7 @@ public class StudySessionService {
      * @param id ID của phiên học cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy phiên học.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public MessageResponse deleteStudySession(String id) {
         if (!SecurityUtils.isAdmin()) {

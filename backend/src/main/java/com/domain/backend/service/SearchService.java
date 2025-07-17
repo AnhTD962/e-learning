@@ -48,6 +48,7 @@ public class SearchService {
 
     /**
      * Chuyển đổi KanjiEntry entity sang KanjiResponse DTO.
+     *
      * @param kanjiEntry Entity KanjiEntry.
      * @return KanjiResponse DTO.
      */
@@ -59,6 +60,7 @@ public class SearchService {
 
     /**
      * Chuyển đổi Lesson entity sang LessonResponse DTO.
+     *
      * @param lesson Entity Lesson.
      * @return LessonResponse DTO.
      */
@@ -70,6 +72,7 @@ public class SearchService {
 
     /**
      * Chuyển đổi Course entity sang CourseResponse DTO.
+     *
      * @param course Entity Course.
      * @return CourseResponse DTO.
      */

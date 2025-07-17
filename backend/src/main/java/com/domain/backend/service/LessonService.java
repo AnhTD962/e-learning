@@ -44,6 +44,7 @@ public class LessonService {
 
     /**
      * Chuyển đổi Lesson entity sang LessonResponse DTO.
+     *
      * @param lesson Entity Lesson.
      * @return LessonResponse DTO.
      */
@@ -56,12 +57,12 @@ public class LessonService {
     /**
      * Tạo một bài học mới trong một module cụ thể của một khóa học.
      *
-     * @param courseId ID của khóa học.
-     * @param moduleId ID của module.
+     * @param courseId      ID của khóa học.
+     * @param moduleId      ID của module.
      * @param lessonRequest Payload yêu cầu để tạo bài học.
      * @return Đối tượng LessonResponse đã tạo.
      * @throws ResourceNotFoundException nếu không tìm thấy khóa học/module.
-     * @throws UnauthorizedException nếu người dùng không được ủy quyền.
+     * @throws UnauthorizedException     nếu người dùng không được ủy quyền.
      */
     @Transactional // Đảm bảo tính nguyên tử cho các hoạt động liên quan đến nhiều tài liệu
     public LessonResponse createLesson(String courseId, String moduleId, LessonRequest lessonRequest) {
@@ -127,11 +128,11 @@ public class LessonService {
     /**
      * Cập nhật một bài học hiện có.
      *
-     * @param lessonId ID của bài học cần cập nhật.
+     * @param lessonId      ID của bài học cần cập nhật.
      * @param lessonRequest Payload yêu cầu để cập nhật bài học.
      * @return Đối tượng LessonResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy bài học hoặc khóa học liên quan.
-     * @throws UnauthorizedException nếu người dùng không được ủy quyền.
+     * @throws UnauthorizedException     nếu người dùng không được ủy quyền.
      */
     public LessonResponse updateLesson(String lessonId, LessonRequest lessonRequest) {
         Lesson existingLesson = lessonRepository.findById(lessonId)
@@ -157,7 +158,7 @@ public class LessonService {
      * @param lessonId ID của bài học cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy bài học hoặc khóa học liên quan.
-     * @throws UnauthorizedException nếu người dùng không được ủy quyền.
+     * @throws UnauthorizedException     nếu người dùng không được ủy quyền.
      */
     @Transactional
     public MessageResponse deleteLesson(String lessonId) {

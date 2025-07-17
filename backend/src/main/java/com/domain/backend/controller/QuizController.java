@@ -27,7 +27,7 @@ public class QuizController {
      * Tạo một quiz mới cho một bài học cụ thể.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.
      *
-     * @param lessonId ID của bài học để liên kết quiz với.
+     * @param lessonId    ID của bài học để liên kết quiz với.
      * @param quizRequest Payload yêu cầu để tạo quiz.
      * @return ResponseEntity với QuizResponse đã tạo.
      */
@@ -73,7 +73,7 @@ public class QuizController {
      * Cập nhật một quiz hiện có.
      * Chỉ ADMIN hoặc TEACHER mới có thể truy cập.
      *
-     * @param quizId ID của quiz cần cập nhật.
+     * @param quizId      ID của quiz cần cập nhật.
      * @param quizRequest Payload yêu cầu để cập nhật quiz.
      * @return ResponseEntity với QuizResponse đã cập nhật.
      */

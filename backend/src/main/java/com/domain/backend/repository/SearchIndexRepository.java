@@ -17,7 +17,10 @@ public interface SearchIndexRepository extends MongoRepository<SearchIndex, Stri
 
     // Có thể thêm các phương thức tìm kiếm khác dựa trên các trường cụ thể
     Optional<SearchIndex> findByEntityTypeAndEntityId(String entityType, String entityId);
+
     List<SearchIndex> findByEntityType(String entityType);
+
     List<SearchIndex> findByCourseId(String courseId);
+
     List<SearchIndex> findByJlptLevel(String jlptLevel);
 }

@@ -1,9 +1,8 @@
 package com.domain.backend.dto.request;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Data // Lombok annotation
 public class QuestionOptionRequest { // Đã đổi tên từ OptionRequest

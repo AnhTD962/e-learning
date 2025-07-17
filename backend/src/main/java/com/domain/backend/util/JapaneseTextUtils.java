@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Trong một ứng dụng thực tế, lớp này sẽ tích hợp với một thư viện NLP tiếng Nhật mạnh mẽ
  * như Kuromoji, Mecab, hoặc các dịch vụ bên ngoài để chuyển đổi chính xác,
  * tạo furigana và phát hiện Romaji/Kana/Kanji.
- *
+ * <p>
  * Đối với ví dụ này, nó cung cấp logic chuyển đổi cơ bản, minh họa.
  */
 @Component
@@ -24,15 +24,24 @@ public class JapaneseTextUtils {
         // Điều này thường liên quan đến một ánh xạ lớn hoặc một thư viện như Kuromoji.
         // Để minh họa, chúng ta sẽ chỉ trả về đầu vào hoặc một phép biến đổi đơn giản.
         switch (romaji.toLowerCase()) {
-            case "konnichiwa": return "こんにちは";
-            case "arigato": return "ありがとう";
-            case "sayonara": return "さようなら";
-            case "a": return "あ";
-            case "i": return "い";
-            case "u": return "う";
-            case "e": return "え";
-            case "o": return "お";
-            default: return romaji; // Fallback
+            case "konnichiwa":
+                return "こんにちは";
+            case "arigato":
+                return "ありがとう";
+            case "sayonara":
+                return "さようなら";
+            case "a":
+                return "あ";
+            case "i":
+                return "い";
+            case "u":
+                return "う";
+            case "e":
+                return "え";
+            case "o":
+                return "お";
+            default:
+                return romaji; // Fallback
         }
     }
 
@@ -103,6 +112,7 @@ public class JapaneseTextUtils {
 
     /**
      * Kiểm tra xem một chuỗi có chứa ký tự Kanji hay không.
+     *
      * @param text Chuỗi cần kiểm tra.
      * @return True nếu chuỗi chứa ít nhất một ký tự Kanji, ngược lại là false.
      */
@@ -115,6 +125,7 @@ public class JapaneseTextUtils {
 
     /**
      * Kiểm tra xem một chuỗi có chứa ký tự Hiragana hay không.
+     *
      * @param text Chuỗi cần kiểm tra.
      * @return True nếu chuỗi chứa ít nhất một ký tự Hiragana, ngược lại là false.
      */
@@ -127,6 +138,7 @@ public class JapaneseTextUtils {
 
     /**
      * Kiểm tra xem một chuỗi có chứa ký tự Katakana hay không.
+     *
      * @param text Chuỗi cần kiểm tra.
      * @return True nếu chuỗi chứa ít nhất một ký tự Katakana, ngược lại là false.
      */
@@ -139,6 +151,7 @@ public class JapaneseTextUtils {
 
     /**
      * Kiểm tra xem một chuỗi có chứa ký tự Romaji (Latin) hay không.
+     *
      * @param text Chuỗi cần kiểm tra.
      * @return True nếu chuỗi chứa ít nhất một ký tự Latin, ngược lại là false.
      */

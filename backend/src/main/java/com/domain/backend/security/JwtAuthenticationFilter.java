@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.web.AuthenticationEntryPoint; // Import AuthenticationEntryPoint
 
 import java.io.IOException;
 
@@ -25,16 +25,13 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
     @Autowired
     private AuthenticationEntryPoint unauthorizedHandler; // Để xử lý lỗi xác thực
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -63,7 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.error("Không thể đặt xác thực người dùng: {}", e.getMessage());
             // Nếu có lỗi trong quá trình xác thực JWT, ủy quyền cho AuthenticationEntryPoint
-            unauthorizedHandler.commence(request, response, new org.springframework.security.core.AuthenticationException("Authentication failed: " + e.getMessage()) {});
+            unauthorizedHandler.commence(request, response, new org.springframework.security.core.AuthenticationException("Authentication failed: " + e.getMessage()) {
+            });
             return; // Dừng chuỗi bộ lọc
         }
 

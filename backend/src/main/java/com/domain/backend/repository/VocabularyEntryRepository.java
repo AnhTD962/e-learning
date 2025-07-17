@@ -10,8 +10,12 @@ import java.util.Optional;
 @Repository
 public interface VocabularyEntryRepository extends MongoRepository<VocabularyEntry, String> {
     Optional<VocabularyEntry> findByJapaneseWord(String japaneseWord);
+
     List<VocabularyEntry> findByJlptLevel(String jlptLevel);
+
     List<VocabularyEntry> findByMeaningRegex(String regex, String options);
+
     List<VocabularyEntry> findByFuriganaRegex(String regex, String options);
+
     List<VocabularyEntry> findByRomajiRegex(String regex, String options);
 }

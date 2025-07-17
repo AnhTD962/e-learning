@@ -166,5 +166,4 @@ const showMessage = (type, title, message) => {
 <style scoped>
 /* Add any specific styles for the LessonDetail component here */
 /* For prose styling (tailwind typography plugin) */
-@import '@tailwindcss/typography';
 </style>

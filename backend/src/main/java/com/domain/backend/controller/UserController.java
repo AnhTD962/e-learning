@@ -51,7 +51,7 @@ public class UserController {
      * Cập nhật hồ sơ người dùng.
      * Chỉ ADMIN hoặc người dùng đó mới có thể cập nhật.
      *
-     * @param id ID của người dùng cần cập nhật.
+     * @param id            ID của người dùng cần cập nhật.
      * @param updateRequest DTO chứa thông tin cập nhật.
      * @return ResponseEntity với UserResponse đã cập nhật.
      */

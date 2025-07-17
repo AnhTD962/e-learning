@@ -3,27 +3,27 @@ import { useAuthStore } from '../stores/auth';
 
 // Import views
 import Home from '../views/Home.vue';
-import Login from '../views/Auth/Login.vue';
-import Register from '../views/Auth/Register.vue';
+import Login from '../views/auth/Login.vue';
+import Register from '../views/auth/Register.vue';
 import Dashboard from '../views/Dashboard.vue';
-import CourseList from '../views/Courses/CourseList.vue';
-import CourseDetail from '../views/Courses/CourseDetail.vue';
-import LessonDetail from '../views/Lessons/LessonDetail.vue';
-import QuizPlay from '../views/Quizzes/QuizPlay.vue';
-import FlashcardReview from '../views/Flashcards/FlashcardReview.vue';
-import KanjiSearch from '../views/Kanji/KanjiSearch.vue';
-import VocabularyList from '../views/Vocabulary/VocabularyList.vue';
+import CourseList from '../views/courses/CourseList.vue';
+import CourseDetail from '../views/courses/CourseDetail.vue';
+import LessonDetail from '../views/lessons/LessonDetail.vue';
+import QuizPlay from '../views/quizzes/QuizPlay.vue';
+import FlashcardReview from '../views/flashcards/FlashcardReview.vue';
+import KanjiSearch from '../views/kanji/KanjiSearch.vue';
+import VocabularyList from '../views/vocabulary/VocabularyList.vue';
 import Profile from '../views/Profile.vue';
-import UserManagement from '../views/Admin/UserManagement.vue';
-import CourseManagement from '../views/Admin/CourseManagement.vue';
-import QuizManagement from '../views/Admin/QuizManagement.vue';
-import FlashcardSetManagement from '../views/Admin/FlashcardSetManagement.vue';
-import KanjiManagement from '../views/Admin/KanjiManagement.vue';
-import VocabularyManagement from '../views/Admin/VocabularyManagement.vue';
-import ProgressOverview from '../views/Admin/ProgressOverview.vue';
-import AchievementManagement from '../views/Admin/AchievementManagement.vue';
-import ContentModeration from '../views/Admin/ContentModeration.vue';
-import StudySessionOverview from '../views/Admin/StudySessionOverview.vue';
+import UserManagement from '../views/admin/UserManagement.vue';
+import CourseManagement from '../views/admin/CourseManagement.vue';
+import QuizManagement from '../views/admin/QuizManagement.vue';
+import FlashcardSetManagement from '../views/admin/FlashcardSetManagement.vue';
+import KanjiManagement from '../views/admin/KanjiManagement.vue';
+import VocabularyManagement from '../views/admin/VocabularyManagement.vue';
+import AchievementManagement from '../views/admin/AchievementManagement.vue';
+import ContentModeration from '../views/admin/ContentModeration.vue';
+import StudySessionOverview from '../views/admin/StudySessionManagement.vue';
+import ProgressOverview from '../views/MyProgress.vue';
 
 
 const routes = [
@@ -155,6 +155,12 @@ const routes = [
     name: 'AdminStudySessionOverview',
     component: StudySessionOverview,
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/my-progress',
+    name: 'MyProgress',
+    component: ProgressOverview,
+    meta: { requiresAuth: true }
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../views/NotFound.vue') }
 ];

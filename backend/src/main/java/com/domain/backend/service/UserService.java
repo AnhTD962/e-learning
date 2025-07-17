@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +46,7 @@ public class UserService {
      * Lấy thông tin người dùng đã đăng nhập hiện tại.
      *
      * @return UserResponse chứa thông tin người dùng hiện tại.
-     * @throws UnauthorizedException nếu không có người dùng nào được xác thực.
+     * @throws UnauthorizedException     nếu không có người dùng nào được xác thực.
      * @throws ResourceNotFoundException nếu người dùng được xác thực không tồn tại trong DB.
      */
     public UserResponse getCurrentUser() {
@@ -61,12 +60,12 @@ public class UserService {
      * Cập nhật hồ sơ người dùng.
      * Chỉ người dùng đó hoặc ADMIN mới có thể cập nhật hồ sơ.
      *
-     * @param id ID của người dùng cần cập nhật.
+     * @param id            ID của người dùng cần cập nhật.
      * @param updateRequest DTO chứa thông tin cập nhật.
      * @return UserResponse của người dùng đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy người dùng.
-     * @throws UnauthorizedException nếu người dùng không được phép cập nhật hồ sơ này.
-     * @throws ValidationException nếu email đã được sử dụng.
+     * @throws UnauthorizedException     nếu người dùng không được phép cập nhật hồ sơ này.
+     * @throws ValidationException       nếu email đã được sử dụng.
      */
     public UserResponse updateUserProfile(String id, UserProfileUpdateRequest updateRequest) {
         User user = userRepository.findById(id)
@@ -106,7 +105,7 @@ public class UserService {
      * @param id ID của người dùng cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy người dùng.
-     * @throws UnauthorizedException nếu người dùng không phải là ADMIN.
+     * @throws UnauthorizedException     nếu người dùng không phải là ADMIN.
      */
     public MessageResponse deleteUser(String id) {
         User user = userRepository.findById(id)
@@ -136,6 +135,7 @@ public class UserService {
 
     /**
      * Chuyển đổi User entity sang UserResponse DTO.
+     *
      * @param user Entity User.
      * @return UserResponse DTO.
      */

@@ -36,6 +36,7 @@ public class ProgressService {
 
     /**
      * Chuyển đổi UserProgress entity sang ProgressResponse DTO.
+     *
      * @param userProgress Entity UserProgress.
      * @return ProgressResponse DTO.
      */
@@ -86,11 +87,11 @@ public class ProgressService {
      * Đánh dấu một bài học là đã hoàn thành cho người dùng trong một khóa học cụ thể.
      * Cập nhật tiến độ tổng thể của khóa học của người dùng.
      *
-     * @param courseId ID của khóa học.
+     * @param courseId                ID của khóa học.
      * @param lessonCompletionRequest Yêu cầu chứa ID bài học để đánh dấu hoàn thành.
      * @return Đối tượng ProgressResponse đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy khóa học/bài học/tiến độ người dùng.
-     * @throws ValidationException nếu bài học không thuộc khóa học đã chỉ định.
+     * @throws ValidationException       nếu bài học không thuộc khóa học đã chỉ định.
      */
     public ProgressResponse markLessonComplete(String courseId, LessonCompletionRequest lessonCompletionRequest) {
         String userId = SecurityUtils.getCurrentUserId();

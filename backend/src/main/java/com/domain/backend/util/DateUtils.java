@@ -17,6 +17,7 @@ public class DateUtils {
 
     /**
      * Định dạng LocalDateTime thành chuỗi theo định dạng mặc định.
+     *
      * @param dateTime Đối tượng LocalDateTime.
      * @return Chuỗi ngày giờ đã định dạng.
      */
@@ -29,6 +30,7 @@ public class DateUtils {
 
     /**
      * Phân tích cú pháp chuỗi ngày giờ thành LocalDateTime theo định dạng mặc định.
+     *
      * @param dateTimeString Chuỗi ngày giờ.
      * @return Đối tượng LocalDateTime.
      * @throws DateTimeParseException nếu chuỗi không thể phân tích cú pháp.
@@ -42,8 +44,9 @@ public class DateUtils {
 
     /**
      * Định dạng LocalDateTime thành chuỗi theo định dạng tùy chỉnh.
+     *
      * @param dateTime Đối tượng LocalDateTime.
-     * @param pattern Mẫu định dạng (ví dụ: "dd/MM/yyyy HH:mm").
+     * @param pattern  Mẫu định dạng (ví dụ: "dd/MM/yyyy HH:mm").
      * @return Chuỗi ngày giờ đã định dạng.
      */
     public String formatDateTime(LocalDateTime dateTime, String pattern) {
@@ -55,8 +58,9 @@ public class DateUtils {
 
     /**
      * Phân tích cú pháp chuỗi ngày giờ thành LocalDateTime theo định dạng tùy chỉnh.
+     *
      * @param dateTimeString Chuỗi ngày giờ.
-     * @param pattern Mẫu định dạng.
+     * @param pattern        Mẫu định dạng.
      * @return Đối tượng LocalDateTime.
      * @throws DateTimeParseException nếu chuỗi không thể phân tích cú pháp.
      */
@@ -69,8 +73,9 @@ public class DateUtils {
 
     /**
      * Tính toán thời lượng giữa hai thời điểm bằng phút.
+     *
      * @param start Thời điểm bắt đầu.
-     * @param end Thời điểm kết thúc.
+     * @param end   Thời điểm kết thúc.
      * @return Thời lượng tính bằng phút.
      */
     public long calculateDurationInMinutes(LocalDateTime start, LocalDateTime end) {

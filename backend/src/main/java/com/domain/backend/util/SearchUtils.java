@@ -15,8 +15,8 @@ public class SearchUtils {
     /**
      * Xây dựng Criteria cho tìm kiếm đa script trong MongoDB.
      *
-     * @param queryText Văn bản truy vấn.
-     * @param scriptType Loại script (KANJI, HIRAGANA, KATAKANA, ROMAJI, ALL).
+     * @param queryText         Văn bản truy vấn.
+     * @param scriptType        Loại script (KANJI, HIRAGANA, KATAKANA, ROMAJI, ALL).
      * @param japaneseTextUtils Tiện ích chuyển đổi văn bản tiếng Nhật.
      * @return Đối tượng Criteria được xây dựng.
      */

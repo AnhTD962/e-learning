@@ -1,5 +1,6 @@
 package com.domain.backend.service;
 
+import com.atilika.kuromoji.ipadic.Token;
 import com.atilika.kuromoji.ipadic.Tokenizer;
 import com.domain.backend.dto.response.MessageResponse;
 import com.domain.backend.entity.VocabularyEntry;
@@ -11,8 +12,6 @@ import com.domain.backend.security.SecurityUtils;
 import com.domain.backend.util.JapaneseTextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.atilika.kuromoji.ipadic.Token;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,14 +25,12 @@ import java.util.Optional;
 @Service
 public class JapaneseTextService {
 
-    @Autowired
-    private JapaneseTextUtils japaneseTextUtils; // Tiện ích xử lý văn bản cơ bản
-
-    @Autowired
-    private VocabularyEntryRepository vocabularyEntryRepository; // Để quản lý từ vựng
-
     // Khởi tạo Kuromoji Tokenizer
     private final Tokenizer tokenizer = new Tokenizer();
+    @Autowired
+    private JapaneseTextUtils japaneseTextUtils; // Tiện ích xử lý văn bản cơ bản
+    @Autowired
+    private VocabularyEntryRepository vocabularyEntryRepository; // Để quản lý từ vựng
 
     /**
      * Tạo furigana cho một chuỗi văn bản tiếng Nhật đã cho.
@@ -83,7 +80,7 @@ public class JapaneseTextService {
      *
      * @param vocabularyEntry Đối tượng VocabularyEntry cần tạo.
      * @return VocabularyEntry đã tạo.
-     * @throws ValidationException nếu từ tiếng Nhật đã tồn tại.
+     * @throws ValidationException   nếu từ tiếng Nhật đã tồn tại.
      * @throws UnauthorizedException nếu người dùng không được phép.
      */
     public VocabularyEntry createVocabularyEntry(VocabularyEntry vocabularyEntry) {
@@ -100,11 +97,11 @@ public class JapaneseTextService {
      * Cập nhật một entry từ vựng hiện có.
      * Chỉ ADMIN hoặc TEACHER mới có thể cập nhật.
      *
-     * @param id ID của entry từ vựng cần cập nhật.
+     * @param id                     ID của entry từ vựng cần cập nhật.
      * @param updatedVocabularyEntry Đối tượng VocabularyEntry với thông tin cập nhật.
      * @return VocabularyEntry đã cập nhật.
      * @throws ResourceNotFoundException nếu không tìm thấy entry.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public VocabularyEntry updateVocabularyEntry(String id, VocabularyEntry updatedVocabularyEntry) {
         if (!SecurityUtils.isAdmin() && !SecurityUtils.isTeacher()) {
@@ -133,7 +130,7 @@ public class JapaneseTextService {
      * @param id ID của entry từ vựng cần xóa.
      * @return MessageResponse thành công.
      * @throws ResourceNotFoundException nếu không tìm thấy entry.
-     * @throws UnauthorizedException nếu người dùng không được phép.
+     * @throws UnauthorizedException     nếu người dùng không được phép.
      */
     public MessageResponse deleteVocabularyEntry(String id) {
         if (!SecurityUtils.isAdmin() && !SecurityUtils.isTeacher()) {
@@ -147,6 +144,7 @@ public class JapaneseTextService {
 
     /**
      * Lấy tất cả các entry từ vựng.
+     *
      * @return Danh sách VocabularyEntry.
      */
     public List<VocabularyEntry> getAllVocabularyEntries() {

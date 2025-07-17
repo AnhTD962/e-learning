@@ -24,9 +24,9 @@ public class EmailService {
     /**
      * Gửi một email đơn giản.
      *
-     * @param to Địa chỉ email người nhận.
+     * @param to      Địa chỉ email người nhận.
      * @param subject Chủ đề email.
-     * @param text Nội dung email.
+     * @param text    Nội dung email.
      * @return MessageResponse thành công hoặc lỗi.
      */
     public MessageResponse sendSimpleEmail(String to, String subject, String text) {
